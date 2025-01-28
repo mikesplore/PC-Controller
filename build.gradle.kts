@@ -14,10 +14,18 @@ group = "com.mike"
 version = "0.0.1"
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClass.set("com.mike.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+
+tasks.shadowJar {
+    archiveClassifier.set("all")
+    mergeServiceFiles()
+    manifest {
+        attributes("Main-Class" to "com.mike.MainKt")
+    }
 }
 
 repositories {
@@ -27,9 +35,9 @@ repositories {
 
 dependencies {
 
-
-
+    implementation("com.github.oshi:oshi-core:6.0.0")
     implementation("io.ktor:ktor-server-core")
+    implementation("io.ktor:ktor-server-cors:2.0.0")
     implementation("io.github.flaxoos:ktor-server-rate-limiting:2.1.2")
     implementation("io.ktor:ktor-server-content-negotiation")
     implementation("io.ktor:ktor-serialization-kotlinx-json")
