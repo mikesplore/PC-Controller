@@ -147,5 +147,11 @@ data class UserEnvironmentInfo(
     val locale: Locale
 )
 
+data class FileTypeUsage(
+    val type: String,
+    val count: Long,
+    val totalSize: Long
+)
+
 
 
