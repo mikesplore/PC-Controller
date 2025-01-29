@@ -75,9 +75,16 @@ Run the application to expose the endpoints.
 ### Step 3: Access system information
 You can use tools like `curl`, Postman, or any HTTP client to interact with the API.
 
-### Example Request:
+#### If you have downloaded the jar file, you can run the application using the following command:
+
+```bash
+java -jar system-information-collector-1.0.0.jar
+```
+
+
+### Example Request via a browser:
 
 To retrieve operating system information:
 
 ```bash
-curl http://localhost:8080/operatingSystemInfo
+http://localhost:8080/operatingSystemInfo
