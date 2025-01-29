@@ -12,6 +12,7 @@ fun Application.configureSystemInfoRouting() {
 
         get("battery") {
             val batteryDetails = systemInfo.collectBatteryDetails()
+            println("Battery details: $batteryDetails")
             if (batteryDetails != null) {
                 call.respond(batteryDetails)
             } else {
@@ -70,9 +71,9 @@ fun Application.configureSystemInfoRouting() {
             call.respond(jvmDetails)
         }
 
-        get("networkInterfaces"){
-            val networkInterfaces = systemInfo.collectNetworkInterfaceDetails()
-            call.respond(networkInterfaces)
+        get("detailedStorageUsage") {
+            val detailedStorageUsage = systemInfo.collectDetailedStorageUsage()
+            call.respond(detailedStorageUsage)
         }
     }
 }
