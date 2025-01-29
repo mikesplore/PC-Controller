@@ -24,7 +24,7 @@ tasks.shadowJar {
     archiveClassifier.set("all")
     mergeServiceFiles()
     manifest {
-        attributes("Main-Class" to "com.mike.MainKt")
+        attributes("Main-Class" to "com.mike.ApplicationKt")
     }
 }
 
