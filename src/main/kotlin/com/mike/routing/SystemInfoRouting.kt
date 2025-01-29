@@ -75,5 +75,10 @@ fun Application.configureSystemInfoRouting() {
             val detailedStorageUsage = systemInfo.collectDetailedStorageUsage()
             call.respond(detailedStorageUsage)
         }
+
+        get("operatingSystemInfo") {
+            val operatingSystemDetails = systemInfo.collectOperatingSystemInfo()
+            call.respond(operatingSystemDetails)
+        }
     }
 }

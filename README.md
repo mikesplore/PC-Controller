@@ -1,48 +1,83 @@
-# PC Controller
+# System Information Collector
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+## Overview
 
-Here are some useful links to get you started:
+The **System Information Collector** is a powerful Kotlin-based application designed to gather and provide comprehensive details about the system it runs on. It exposes this information through various API endpoints, making it easy to monitor and manage system resources.
 
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need
-  to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+## 🚀 Features
 
-## Features
+- **Operating System Information:**  
+  Get details about the OS, including its name, version, architecture, manufacturer, build number, and install date.
 
-Here's a list of features included in this project:
+- **Computer System Details:**  
+  Access information such as the manufacturer, model, and serial number.
 
-| Name                                                                   | Description                                                                        |
-|------------------------------------------------------------------------|------------------------------------------------------------------------------------|
-| [Routing](https://start.ktor.io/p/routing)                             | Provides a structured routing DSL                                                  |
-| [Rate Limiting](https://start.ktor.io/p/ktor-server-rate-limiting)     | Manage request rate limiting as you see fit                                        |
-| [Content Negotiation](https://start.ktor.io/p/content-negotiation)     | Provides automatic content conversion according to Content-Type and Accept headers |
-| [kotlinx.serialization](https://start.ktor.io/p/kotlinx-serialization) | Handles JSON serialization using kotlinx.serialization library                     |
-| [Postgres](https://start.ktor.io/p/postgres)                           | Adds Postgres database to your application                                         |
-| [Exposed](https://start.ktor.io/p/exposed)                             | Adds Exposed database to your application                                          |
-| [GSON](https://start.ktor.io/p/ktor-gson)                              | Handles JSON serialization using GSON library                                      |
-| [Call Logging](https://start.ktor.io/p/call-logging)                   | Logs client requests                                                               |
-| [Status Pages](https://start.ktor.io/p/status-pages)                   | Provides exception handling for routes                                             |
+- **Processor Details:**  
+  Gather insights about the processor, including its name, physical and logical core counts, maximum frequency, and current frequency.
 
-## Building & Running
+- **Memory Information:**  
+  View memory statistics, including total, available, and used memory, as well as cache size and swap memory details.
 
-To build or run the project, use one of the following tasks:
+- **Battery Information:**  
+  Retrieve battery-related data such as remaining capacity, time remaining, voltage, temperature, cycle count, charging status, and overall battery health.
 
-| Task                          | Description                                                          |
-|-------------------------------|----------------------------------------------------------------------|
-| `./gradlew test`              | Run the tests                                                        |
-| `./gradlew build`             | Build everything                                                     |
-| `buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
-| `buildImage`                  | Build the docker image to use with the fat JAR                       |
-| `publishImageToLocalRegistry` | Publish the docker image locally                                     |
-| `run`                         | Run the server                                                       |
-| `runDocker`                   | Run using the local docker image                                     |
+- **Display Information:**  
+  Get details about connected displays, including device names, resolutions, and refresh rates.
 
-If the server starts successfully, you'll see the following output:
+- **Software Information:**  
+  Fetch data on running processes, system uptime, JVM information, and environment variables.
 
-```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
-```
+- **Storage Information:**  
+  Monitor total, used, and free storage space.
 
+- **User Environment Information:**  
+  View details like the username, home directory, language, country, timezone, and locale.
+
+- **Detailed Storage Usage:**  
+  Analyze and categorize file storage by type and size.
+
+- **System Commands:**  
+  Execute commands to:
+  - 🔌 Shutdown
+  - 🔄 Restart
+  - 💤 Sleep
+  - 🗄️ Hibernate
+  - 🚪 Log off
+  - 🔒 Lock the system
+
+---
+
+## 📡 API Endpoints
+
+- **`/operatingSystemInfo`** - Retrieves operating system information.
+- **`/systemInfo`** - Fetches computer system details.
+- **`/processorDetails`** - Provides processor details.
+- **`/memory`** - Displays memory statistics.
+- **`/JvmDetails`** - Returns JVM information.
+- **`/detailedStorageUsage`** - Analyzes and categorizes storage usage.
+- **`/shutdown`** - Shuts down the system.
+- **`/restart`** - Restarts the system.
+- **`/sleep`** - Puts the system to sleep.
+- **`/hibernate`** - Hibernates the system.
+- **`/logoff`** - Logs off the current user.
+- **`/lock`** - Locks the system.
+
+---
+
+## 🛠️ Usage
+
+### Step 1: Set up the project
+Ensure you have the required environment to build and run the application.
+
+### Step 2: Start the application
+Run the application to expose the endpoints.
+
+### Step 3: Access system information
+You can use tools like `curl`, Postman, or any HTTP client to interact with the API.
+
+### Example Request:
+
+To retrieve operating system information:
+
+```bash
+curl http://localhost:8080/operatingSystemInfo
