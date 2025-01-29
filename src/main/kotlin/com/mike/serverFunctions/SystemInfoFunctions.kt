@@ -1,14 +1,15 @@
 package com.mike.serverFunctions
 
 import com.mike.model.*
+import kotlinx.io.IOException
 import oshi.SystemInfo
 import oshi.hardware.HardwareAbstractionLayer
 import oshi.software.os.OperatingSystem
 import java.awt.GraphicsEnvironment
 import java.io.File
 import java.net.NetworkInterface
-import java.nio.file.Files
-import java.nio.file.Paths
+import java.nio.file.*
+import java.nio.file.attribute.BasicFileAttributes
 import java.util.*
 
 
@@ -126,27 +127,6 @@ class SystemInformationCollector {
 
 
 
-    fun collectNetworkInterfaceDetails(): List<NetworkInterfaceDetails> {
-        return Collections.list(NetworkInterface.getNetworkInterfaces()).map { networkInterface ->
-            NetworkInterfaceDetails(
-                name = networkInterface.name,
-                displayName = networkInterface.displayName,
-                ipv4Address = Collections.list(networkInterface.inetAddresses)
-                    .filter { it.hostAddress.contains(".") }
-                    .map { it.hostAddress },
-                ipv6Address = Collections.list(networkInterface.inetAddresses)
-                    .filter { it.hostAddress.contains(":") }
-                    .map { it.hostAddress },
-                macAddress = networkInterface.hardwareAddress?.joinToString(":") { "%02X".format(it) } ?: "Unknown",
-                mtu = networkInterface.mtu,
-                isUp = networkInterface.isUp,
-                isVirtual = networkInterface.isVirtual
-            )
-        }
-    }
-
-
-
     fun collectStorageInfo(): StorageInfo {
         val roots = File.listRoots()
         return StorageInfo(
@@ -176,5 +156,45 @@ class SystemInformationCollector {
             timezone = TimeZone.getDefault().id,
             locale = Locale.getDefault()
         )
+    }
+
+    fun collectDetailedStorageUsage(): List<FileTypeUsage> {
+        val fileTypeUsageMap = mutableMapOf<String, FileTypeUsage>()
+
+        val visitor = object : SimpleFileVisitor<Path>() {
+            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
+                try {
+                    val fileType = Files.probeContentType(file) ?: "Unknown"
+                    val fileSize = attrs.size()
+
+                    val usage = fileTypeUsageMap.getOrDefault(fileType, FileTypeUsage(fileType, 0, 0))
+                    fileTypeUsageMap[fileType] = usage.copy(
+                        count = usage.count + 1,
+                        totalSize = usage.totalSize + fileSize
+                    )
+                } catch (e: Exception) {
+                    // Log the exception and continue
+                    println("Error accessing file: ${file.toAbsolutePath()}: ${e.message}")
+                }
+                return FileVisitResult.CONTINUE
+            }
+
+            override fun visitFileFailed(file: Path, exc: IOException): FileVisitResult {
+                // Log the exception and continue
+                println("Error visiting file: ${file.toAbsolutePath()}: ${exc.message}")
+                return FileVisitResult.CONTINUE
+            }
+        }
+
+        FileSystems.getDefault().rootDirectories.forEach { root ->
+            try {
+                Files.walkFileTree(root, visitor)
+            } catch (e: Exception) {
+                // Log the exception and continue
+                println("Error walking file tree for root: ${root.toAbsolutePath()}: ${e.message}")
+            }
+        }
+
+        return fileTypeUsageMap.values.toList()
     }
 }
