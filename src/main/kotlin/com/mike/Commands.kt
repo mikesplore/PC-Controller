@@ -47,12 +47,13 @@ private fun executeMacCommand(command: String) {
 
 private fun executeLinuxCommand(command: String) {
     val runtime = Runtime.getRuntime()
+    val user = System.getProperty("user.name")
     when (command) {
         // System commands
         "shutdown" -> runtime.exec("shutdown -h now")
         "restart" -> runtime.exec("shutdown -r now")
         "hibernate" -> runtime.exec("systemctl hibernate")
-        "logoff" -> runtime.exec("pkill -KILL -u $USER")
+        "logoff" -> runtime.exec("pkill -KILL -u $user")
         "sleep" -> runtime.exec("systemctl suspend")
         "lock" -> runtime.exec("gnome-screensaver-command -l")
     }
