@@ -109,8 +109,6 @@ class SystemInformationCollector {
         return SoftwareInfo(
             runningProcessCount = processes.size,
             systemUptime = os.systemUptime,
-            jvmDetails = collectJvmDetails(),
-            environmentVariables = System.getenv()
         )
     }
 
@@ -156,45 +154,5 @@ class SystemInformationCollector {
             timezone = TimeZone.getDefault().id,
             locale = Locale.getDefault()
         )
-    }
-
-    fun collectDetailedStorageUsage(): List<FileTypeUsage> {
-        val fileTypeUsageMap = mutableMapOf<String, FileTypeUsage>()
-
-        val visitor = object : SimpleFileVisitor<Path>() {
-            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                try {
-                    val fileType = Files.probeContentType(file) ?: "Unknown"
-                    val fileSize = attrs.size()
-
-                    val usage = fileTypeUsageMap.getOrDefault(fileType, FileTypeUsage(fileType, 0, 0))
-                    fileTypeUsageMap[fileType] = usage.copy(
-                        count = usage.count + 1,
-                        totalSize = usage.totalSize + fileSize
-                    )
-                } catch (e: Exception) {
-                    // Log the exception and continue
-                    println("Error accessing file: ${file.toAbsolutePath()}: ${e.message}")
-                }
-                return FileVisitResult.CONTINUE
-            }
-
-            override fun visitFileFailed(file: Path, exc: IOException): FileVisitResult {
-                // Log the exception and continue
-                println("Error visiting file: ${file.toAbsolutePath()}: ${exc.message}")
-                return FileVisitResult.CONTINUE
-            }
-        }
-
-        FileSystems.getDefault().rootDirectories.forEach { root ->
-            try {
-                Files.walkFileTree(root, visitor)
-            } catch (e: Exception) {
-                // Log the exception and continue
-                println("Error walking file tree for root: ${root.toAbsolutePath()}: ${e.message}")
-            }
-        }
-
-        return fileTypeUsageMap.values.toList()
     }
 }
