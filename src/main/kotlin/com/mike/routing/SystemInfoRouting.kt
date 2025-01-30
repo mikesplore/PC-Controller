@@ -29,7 +29,7 @@ fun Application.configureSystemInfoRouting() {
             }
         }
 
-        get("software") {
+        get("softwareInfo") {
             val softwareInfo = systemInfo.collectSoftwareInfo()
             call.respond(softwareInfo)
         }
@@ -41,7 +41,7 @@ fun Application.configureSystemInfoRouting() {
             call.respond(storageInfo)
         }
 
-        get("userEnvironment") {
+        get("userEnvironmentInfo") {
             val userEnvironmentInfo = systemInfo.collectUserEnvironmentInfo()
             call.respond(userEnvironmentInfo)
         }
@@ -71,10 +71,6 @@ fun Application.configureSystemInfoRouting() {
             call.respond(jvmDetails)
         }
 
-        get("detailedStorageUsage") {
-            val detailedStorageUsage = systemInfo.collectDetailedStorageUsage()
-            call.respond(detailedStorageUsage)
-        }
 
         get("operatingSystemInfo") {
             val operatingSystemDetails = systemInfo.collectOperatingSystemInfo()
