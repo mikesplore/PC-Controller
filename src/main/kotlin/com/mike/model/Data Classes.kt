@@ -87,8 +87,6 @@ data class DisplayInfo(
 data class SoftwareInfo(
     val runningProcessCount: Int,
     val systemUptime: Long,
-    val jvmDetails: JvmDetails,
-    val environmentVariables: Map<String, String>
 )
 
 data class JvmDetails(
@@ -100,26 +98,7 @@ data class JvmDetails(
 )
 
 
-data class NetworkInterfaceDetails(
-    val name: String,
-    val displayName: String,
-    val ipv4Address: List<String>,
-    val ipv6Address: List<String>,
-    val macAddress: String,
-    val mtu: Int,
-    val isUp: Boolean,
-    val isVirtual: Boolean
-)
 
-
-data class DetailedProcessInfo(
-    val pid: Int,
-    val name: String,
-    val cpuUsage: Double,
-    val memoryUsage: Long,
-    val startTime: Long,
-    val path: String
-)
 
 data class StorageInfo(
     val mountPoints: List<MountPointDetails>,
@@ -147,11 +126,7 @@ data class UserEnvironmentInfo(
     val locale: Locale
 )
 
-data class FileTypeUsage(
-    val type: String,
-    val count: Long,
-    val totalSize: Long
-)
+
 
 
 
