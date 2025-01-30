@@ -3,6 +3,8 @@ package com.mike
 import kotlinx.io.IOException
 import org.h2.engine.DbObject.USER
 import java.util.*
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 fun executeCommand(command: String) {
     val os = System.getProperty("os.name").lowercase(Locale.getDefault())
@@ -45,16 +47,52 @@ private fun executeMacCommand(command: String) {
     }
 }
 
+
+
 private fun executeLinuxCommand(command: String) {
-    val runtime = Runtime.getRuntime()
     val user = System.getProperty("user.name")
-    when (command) {
-        // System commands
-        "shutdown" -> runtime.exec("shutdown -h now")
-        "restart" -> runtime.exec("shutdown -r now")
-        "hibernate" -> runtime.exec("systemctl hibernate")
-        "logoff" -> runtime.exec("pkill -KILL -u $user")
-        "sleep" -> runtime.exec("systemctl suspend")
-        "lock" -> runtime.exec("gnome-screensaver-command -l")
+
+    try {
+        when (command) {
+            // System commands
+            "shutdown" -> executeCommand("shutdown -h now", requireRoot = true)
+            "restart" -> executeCommand("shutdown -r now", requireRoot = true)
+            "hibernate" -> executeCommand("systemctl hibernate", requireRoot = true)
+            "logoff" -> executeCommand("pkill -KILL -u $user")
+            "sleep" -> executeCommand("systemctl suspend", requireRoot = true)
+            "lock" -> executeCommand("dm-tool lock") // For LightDM (common in Kali Linux)
+            else -> println("Unknown command: $command")
+        }
+    } catch (e: Exception) {
+        println("Error executing command '$command': ${e.message}")
+    }
+}
+
+/**
+ * Helper function to execute a Linux command and handle its output/errors.
+ * @param command The command to execute.
+ * @param requireRoot Whether the command requires root privileges.
+ */
+private fun executeCommand(command: String, requireRoot: Boolean = false) {
+    val runtime = Runtime.getRuntime()
+    val fullCommand = if (requireRoot) "echo '0' | sudo -S $command" else command
+
+    try {
+        val process = runtime.exec(fullCommand)
+        val exitCode = process.waitFor()
+
+        // Read command output
+        val output = BufferedReader(InputStreamReader(process.inputStream)).readText()
+        val error = BufferedReader(InputStreamReader(process.errorStream)).readText()
+
+        if (exitCode == 0) {
+            println("Command executed successfully: $fullCommand")
+            if (output.isNotEmpty()) println("Output: $output")
+        } else {
+            println("Command failed with exit code $exitCode: $fullCommand")
+            if (error.isNotEmpty()) println("Error: $error")
+        }
+    } catch (e: Exception) {
+        println("Error executing command '$fullCommand': ${e.message}")
     }
 }
