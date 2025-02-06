@@ -83,6 +83,7 @@ java -jar system-information-collector-1.0.0.jar
 
 
 ### Example Request via a browser:
+https://dbdiagram.io/d/TimetableSchema-67a3049b263d6cf9a0135406
 
 To retrieve operating system information:
 
