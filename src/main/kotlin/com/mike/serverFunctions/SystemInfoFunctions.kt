@@ -1,15 +1,16 @@
 package com.mike.serverFunctions
 
 import com.mike.model.*
-import kotlinx.io.IOException
 import oshi.SystemInfo
 import oshi.hardware.HardwareAbstractionLayer
 import oshi.software.os.OperatingSystem
 import java.awt.GraphicsEnvironment
 import java.io.File
-import java.net.NetworkInterface
-import java.nio.file.*
-import java.nio.file.attribute.BasicFileAttributes
+import java.net.DatagramPacket
+import java.net.DatagramSocket
+import java.net.InetAddress
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.util.*
 
 
@@ -28,7 +29,6 @@ class SystemInformationCollector {
             installDate = os.systemBootTime
         )
     }
-
 
 
     fun collectComputerSystemDetails(): ComputerSystemDetails {
@@ -124,7 +124,6 @@ class SystemInformationCollector {
     }
 
 
-
     fun collectStorageInfo(): StorageInfo {
         val roots = File.listRoots()
         return StorageInfo(
@@ -155,4 +154,13 @@ class SystemInformationCollector {
             locale = Locale.getDefault()
         )
     }
+
+    fun collectSensorDetails(): SensorDetails {
+        return SensorDetails(
+            cpuTemperature = hal.sensors.cpuTemperature,
+            fanSpeeds = hal.sensors.fanSpeeds.toList(),
+            cpuVoltage = hal.sensors.cpuVoltage
+        )
+    }
+
 }

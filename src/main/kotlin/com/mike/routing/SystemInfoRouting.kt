@@ -35,7 +35,6 @@ fun Application.configureSystemInfoRouting() {
         }
 
 
-
         get("storage") {
             val storageInfo = systemInfo.collectStorageInfo()
             call.respond(storageInfo)
@@ -75,6 +74,11 @@ fun Application.configureSystemInfoRouting() {
         get("operatingSystemInfo") {
             val operatingSystemDetails = systemInfo.collectOperatingSystemInfo()
             call.respond(operatingSystemDetails)
+        }
+
+        get("sensorInfo") {
+            val sensorInfo = systemInfo.collectSensorDetails()
+            call.respond(sensorInfo)
         }
     }
 }

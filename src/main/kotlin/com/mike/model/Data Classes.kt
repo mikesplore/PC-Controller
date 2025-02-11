@@ -126,6 +126,12 @@ data class UserEnvironmentInfo(
     val locale: Locale
 )
 
+data class SensorDetails(
+    val cpuTemperature: Double,
+    val fanSpeeds: List<Int>,
+    val cpuVoltage: Double
+)
+
 
 
 

@@ -15,19 +15,10 @@ fun Application.configureRouting() {
     }
     routing {
 
-        get("ping"){
+        get("/"){
             call.respondText("Server is up and running", status = HttpStatusCode.OK)
         }
 
-
-        get("/") {
-            val formFile = this::class.java.classLoader.getResource("form.html")?.toURI()?.let { File(it) }
-            if (formFile != null && formFile.exists()) {
-                call.respondFile(formFile)
-            } else {
-                call.respondText("Form not found", status = HttpStatusCode.NotFound)
-            }
-        }
 
         configureSystemInfoRouting()
         configureStatusManager()

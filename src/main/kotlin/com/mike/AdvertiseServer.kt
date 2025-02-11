@@ -27,8 +27,11 @@ fun broadcastServerAvailability(port: Int = 8080) {
         // Get the MAC address of the primary network interface
         val macAddress = getMacAddress()?.joinToString(":") { "%02X".format(it) } ?: "UNKNOWN"
 
+        // Get the type of operating system
+        val os = System.getProperty("os.name")
+
         // Prepare the server information message
-        val serverInfo = "SERVER_DISCOVERY:$pcName:$macAddress:localhost:$port"
+        val serverInfo = "SERVER_DISCOVERY:$pcName:$macAddress:localhost:$port:$os"
         val buffer = serverInfo.toByteArray()
 
         // Create a UDP packet to broadcast
